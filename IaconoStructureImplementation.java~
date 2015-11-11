@@ -1,0 +1,9 @@
+import java.util.*;
+
+public class IaconoStructureImplementation {
+  
+  public static void main (String [] args) {
+    Scanner scan = new Scanner(System.in);
+    ListOfCountMapsWithLRU<String> list = new ListOfCountMapsWithLRU<String>();
+    
+    

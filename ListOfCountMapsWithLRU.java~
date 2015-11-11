@@ -2,11 +2,7 @@ import java.util.*;
 
 public class ListOfCountMapsWithLRU <K extends Comparable <? super K>> implements CountMap<K>  {
  
-
-  private ArrayList<BSTwithLRU<K>> list = new ArrayList<BSTwithLRU<K>>(){{
-    add(new BSTwithLRU<K>());
-  }};
-
+  private ArrayList<BSTwithLRU<K>> list = new ArrayList<BSTwithLRU<K>>(new BSTwithLRU<K>());
  
   
   
@@ -19,41 +15,28 @@ public class ListOfCountMapsWithLRU <K extends Comparable <? super K>> implement
     int i = 0;
     int k = 0;
     while (i < list.size()) {   //for each tree in the list, it tries to update. If its updated or finishes looking at all the trees, it breaks while loop
-      
       System.out.println("Entered while loop");
-     /* if (list.get(i) == null) {
-        list.get(i).add(key, 1);
-      System.out.println("Added in first if statement");
-      } */
-      
-
-      //else {
-        updated = list.get(i).update(key, 1);
-        System.out.println("Updated is " + updated);
-        if (updated) {
-          removed = list.get(i).remove(key);  //remove the key
-          list.get(0).add(key, removed.getValue());
-          System.out.println("added " + key + " to list");
-          if (list.get(0).size() > 10) {
-            removed = list.get(0).removeLRU();
-            k = 1;
-            while (k < list.size()) {
-              list.get(k).add(removed.getKey(), removed.getValue()); // adds the particular key and value of the previously removed LRU to the kth tree
-              if (list.get(k).size() > Math.pow(list.get(k-1).size(), 2)) k++;   //if size is greater, increase k, continue while loop
-              else break; //and end the while loop 
-            }
-          }       
-          break;
-        }// we can break out of while loop once we've updated
-      //}
-        i++;
+      updated = list.get(i).update(key, 1);
+      if (updated) {
+        removed = list.get(i).remove(key);  //remove the key
+        list.get(0).add(key, removed.getValue());
+        System.out.println("added " + key + " to list");
+        if (list.get(0).size() > 10) {
+          removed = list.get(0).removeLRU();
+          k = 1;
+          while (k < list.size()) {
+            list.get(k).add(removed.getKey(), removed.getValue()); // adds the particular key and value of the previously removed LRU to the kth tree
+            if (list.get(k).size() > Math.pow(list.get(k-1).size(), 2)) k++;   //if size is greater, increase k, continue while loop
+            else break; //and end the while loop 
+          }
+        }       
+        break;
+      }// we can break out of while loop once we've updated
     }
     
     
     if ((list.size() > 0) && (updated == false)) {   // after the while loop updated wasn't changed to true - so no update happened
-      System.out.println("Entered second if statement");
       list.get(0).add(key, 1);   //adds the key to the list
-      System.out.println("Key got added");
       if (list.get(0).size() > 10) {
           removed = list.get(0).removeLRU();
           k = 1;
